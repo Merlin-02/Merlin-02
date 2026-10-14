@@ -1,8 +1,4 @@
 <p align="center">
-  <img src="https://github.com/Merlin-02/Merlin-02/blob/main/assets/banner.svg?raw=true" alt="Merlin-02 Banner" width="100%" />
-</p>
-
-<p align="center">
   <img src="https://github.com/Merlin-02/Merlin-02/actions/workflows/validate.yml/badge.svg" alt="Validate Status" />
   <img src="https://komarev.com/ghpvc/?username=Merlin-02&style=flat&color=00FFE5&label=PROFILE+VIEWS" alt="profile views" />
   <img src="https://img.shields.io/github/followers/Merlin-02?style=flat&color=00FFE5&logo=github&logoColor=00FFE5&label=FOLLOWERS" alt="followers" />
@@ -85,11 +81,6 @@ status: training · environment: production-ready
 |----------|-------------|------------|--------|
 | 🔗 **[Pulmones_Metodologia](https://github.com/Merlin-02/Pulmones_Metodologia)** | Diagnóstico asistido COVID-19/Tuberculosis/Saludable con Transfer Learning (MobileNetV2) + SVM clásico — **97.68% accuracy** en 560 imágenes test | `Python` `TensorFlow` `MobileNetV2` `scikit-learn` `FastAPI` `Node.js` `Docker` `Conda` | 🟢 Active |
 | 🔗 **[Detective_Digital (MediaMind)](https://github.com/Merlin-02/Detective_Digital)** | MVP Hackathon UNESCO 2026 — Juego de alfabetización mediática con "etiqueta informativa" nutricional, multijugador online, comunidad verificada, i18n ES/EN/PT | `React 19` `TypeScript` `Vite` `Tailwind v4` `Zustand` `Recharts` `Node.js` `WebSocket` `Railway` | 🟢 Active |
-| 🔗 **[Repo 3](https://github.com/Merlin-02)** | Descripción breve del proyecto | `Python` `LangChain` `LLMs` `RAG` `PostgreSQL` | 🟡 WIP |
-| 🔗 **[Repo 4](https://github.com/Merlin-02)** | Descripción breve del proyecto | `Python` `TensorFlow` `Embeddings` `GitHub Actions` | 🟢 Active |
-
-> **Nota:** Edita la tabla arriba con tus 4-6 repos más representativos. Usa `git push` para actualizar.
-
 </div>
 
 ---
