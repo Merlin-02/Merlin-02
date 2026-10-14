@@ -1,6 +1,5 @@
 <p align="center">
   <img src="https://github.com/Merlin-02/Merlin-02/actions/workflows/validate.yml/badge.svg" alt="Validate Status" />
-  <img src="https://komarev.com/ghpvc/?username=Merlin-02&style=flat&color=00FFE5&label=PROFILE+VIEWS" alt="profile views" />
   <img src="https://img.shields.io/github/followers/Merlin-02?style=flat&color=00FFE5&logo=github&logoColor=00FFE5&label=FOLLOWERS" alt="followers" />
   <img src="https://img.shields.io/github/stars/Merlin-02?style=flat&color=FF007A&logo=github&logoColor=FF007A&label=STARS" alt="stars" />
 </p>
