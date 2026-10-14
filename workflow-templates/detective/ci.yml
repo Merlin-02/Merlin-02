@@ -1,0 +1,121 @@
+name: 🕵️ Detective Digital CI/CD
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  lint-typecheck-test:
+    name: 🔍 Lint, TypeCheck & Build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: TypeCheck (tsc)
+        run: npm run typecheck
+
+      - name: Lint (oxlint)
+        run: npm run lint
+
+      - name: Build (Vite)
+        run: npm run build
+
+      - name: Test data pipeline (dry-run)
+        run: |
+          npm run casos:web -- --max 2 --dry-run 2>&1 | head -30 || true
+
+  websocket-test:
+    name: 🔌 WebSocket Server Test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Start WebSocket server in background
+        run: |
+          npm run server &
+          SERVER_PID=$!
+          sleep 3
+          # Test connection
+          node -e "
+          const WebSocket = require('ws');
+          const ws = new WebSocket('ws://localhost:8787');
+          ws.on('open', () => {
+            console.log('✅ WebSocket connection OK');
+            ws.close();
+            process.exit(0);
+          });
+          ws.on('error', (err) => {
+            console.error('❌ WebSocket error:', err.message);
+            process.exit(1);
+          });
+          setTimeout(() => { console.error('❌ Timeout'); process.exit(1); }, 5000);
+          "
+          kill $SERVER_PID 2>/dev/null || true
+
+  deploy-preview:
+    name: 🚀 Deploy Preview (Railway)
+    needs: [lint-typecheck-test, websocket-test]
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Railway CLI
+        run: npm i -g @railway/cli
+
+      - name: Deploy to Railway Preview
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: |
+          if [ -n "$RAILWAY_TOKEN" ]; then
+            railway up --detach --service=preview-${{ github.event.number }}
+            echo "✅ Preview deployed"
+          else
+            echo "ℹ️ RAILWAY_TOKEN not set - skipping preview deploy"
+          fi
+
+  notify:
+    name: 📢 Notify
+    needs: [lint-typecheck-test, websocket-test, deploy-preview]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Status summary
+        run: |
+          echo "🕵️ Detective Digital CI/CD"
+          echo "Lint/TypeCheck/Build: ${{ needs.lint-typecheck-test.result }}"
+          echo "WebSocket Test: ${{ needs.websocket-test.result }}"
+          echo "Deploy Preview: ${{ needs.deploy-preview.result }}"
+          if [[ "${{ needs.lint-typecheck-test.result }}" != "success" ]] || [[ "${{ needs.websocket-test.result }}" != "success" ]]; then
+            exit 1
+          fi

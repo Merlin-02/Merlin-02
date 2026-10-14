@@ -1,0 +1,165 @@
+<svg width="1200" height="400" viewBox="0 0 1200 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Gradientes cyberpunk -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0D0D0D"/>
+      <stop offset="50%" style="stop-color:#1A0D1A"/>
+      <stop offset="100%" style="stop-color:#0D0D0D"/>
+    </linearGradient>
+    <linearGradient id="neonCyan" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#00FFE5"/>
+      <stop offset="100%" style="stop-color:#00D4AA"/>
+    </linearGradient>
+    <linearGradient id="neonMagenta" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#FF007A"/>
+      <stop offset="100%" style="stop-color:#CC0062"/>
+    </linearGradient>
+    <linearGradient id="neonGold" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#FFD700"/>
+      <stop offset="100%" style="stop-color:#E6C200"/>
+    </linearGradient>
+    <radialGradient id="glowCyan" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#00FFE5;stop-opacity:0.3"/>
+      <stop offset="100%" style="stop-color:#00FFE5;stop-opacity:0"/>
+    </radialGradient>
+    <radialGradient id="glowMagenta" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#FF007A;stop-opacity:0.25"/>
+      <stop opacity="1" offset="100%" style="stop-color:#FF007A;stop-opacity:0"/>
+    </radialGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="textGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+      <path d="M 60 0 L 0 0 0 60" fill="none" stroke="url(#neonCyan)" stroke-width="0.5" opacity="0.1"/>
+    </pattern>
+    <pattern id="dots" width="30" height="30" patternUnits="userSpaceOnUse">
+      <circle cx="15" cy="15" r="1" fill="url(#neonCyan)" opacity="0.15"/>
+    </pattern>
+    <!-- Animaciones -->
+    <style>
+      @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.6; } }
+      @keyframes scanline { 0% { transform: translateY(-100%); } 100% { transform: translateY(400px); } }
+      @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+      @keyframes rotate { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+      @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+      .pulse { animation: pulse 3s ease-in-out infinite; }
+      .float { animation: float 4s ease-in-out infinite; }
+      .rotate { animation: rotate 20s linear infinite; transform-origin: center; }
+      .blink { animation: blink 1.5s step-end infinite; }
+      .scanline { animation: scanline 8s linear infinite; }
+    </style>
+  </defs>
+
+  <!-- Fondo -->
+  <rect width="1200" height="400" fill="url(#bgGrad)"/>
+  <rect width="1200" height="400" fill="url(#grid)"/>
+  <rect width="1200" height="400" fill="url(#dots)"/>
+
+  <!-- Glows de fondo -->
+  <circle cx="200" cy="100" r="180" fill="url(#glowCyan)" opacity="0.4"/>
+  <circle cx="1000" cy="300" r="200" fill="url(#glowMagenta)" opacity="0.35"/>
+  <circle cx="600" cy="200" r="150" fill="url(#glowCyan)" opacity="0.15"/>
+
+  <!-- Scanline effect -->
+  <rect width="1200" height="4" fill="url(#neonCyan)" opacity="0.15" class="scanline"/>
+
+  <!-- Lado izquierdo: Terminal prompt -->
+  <g transform="translate(60, 80)" class="float">
+    <text x="0" y="0" font-family="'JetBrains Mono', 'Fira Code', monospace" font-size="16" fill="url(#neonCyan)" filter="url(#textGlow)">$ whoami</text>
+    <text x="0" y="30" font-family="'JetBrains Mono', 'Fira Code', monospace" font-size="28" font-weight="700" fill="url(#neonCyan)" filter="url(#textGlow)">Merlin-02</text>
+    <text x="0" y="65" font-family="'JetBrains Mono', 'Fira Code', monospace" font-size="14" fill="url(#neonMagenta)" opacity="0.8">Software & AI Engineer</text>
+    <text x="0" y="90" font-family="'JetBrains Mono', 'Fira Code', monospace" font-size="14" fill="url(#neonGold)" opacity="0.8">Computer Vision • MLOps • NLP • Fullstack</text>
+
+    <!-- Cursor parpadeante -->
+    <text x="85" y="0" font-family="'JetBrains Mono', monospace" font-size="16" fill="url(#neonCyan)" class="blink">▋</text>
+  </g>
+
+  <!-- Separador vertical -->
+  <line x1="380" y1="60" x2="380" y2="340" stroke="url(#neonCyan)" stroke-width="1" opacity="0.3" stroke-dasharray="8,4"/>
+
+  <!-- Centro: Tags tecnológicos animados -->
+  <g transform="translate(420, 70)">
+    <g class="pulse" transform="translate(0, 0)">
+      <rect x="0" y="0" width="160" height="36" rx="6" fill="none" stroke="url(#neonCyan)" stroke-width="1.5" filter="url(#glow)"/>
+      <text x="80" y="23" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="600" fill="url(#neonCyan)">🐍 Python</text>
+    </g>
+    <g class="pulse" style="animation-delay: 0.3s;" transform="translate(0, 50)">
+      <rect x="0" y="0" width="160" height="36" rx="6" fill="none" stroke="url(#neonMagenta)" stroke-width="1.5" filter="url(#glow)"/>
+      <text x="80" y="23" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="600" fill="url(#neonMagenta)">🔥 PyTorch</text>
+    </g>
+    <g class="pulse" style="animation-delay: 0.6s;" transform="translate(0, 100)">
+      <rect x="0" y="0" width="160" height="36" rx="6" fill="none" stroke="url(#neonGold)" stroke-width="1.5" filter="url(#glow)"/>
+      <text x="80" y="23" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="600" fill="url(#neonGold)">⚡ FastAPI</text>
+    </g>
+    <g class="pulse" style="animation-delay: 0.9s;" transform="translate(0, 150)">
+      <rect x="0" y="0" width="160" height="36" rx="6" fill="none" stroke="url(#neonCyan)" stroke-width="1.5" filter="url(#glow)"/>
+      <text x="80" y="23" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="600" fill="url(#neonCyan)">🐳 Docker</text>
+    </g>
+  </g>
+
+  <!-- Separador -->
+  <line x1="620" y1="60" x2="620" y2="340" stroke="url(#neonMagenta)" stroke-width="1" opacity="0.3" stroke-dasharray="8,4"/>
+
+  <!-- Lado derecho: Proyectos ancla -->
+  <g transform="translate(660, 60)">
+    <!-- Pulmones -->
+    <g class="float" style="animation-delay: 1s;">
+      <circle cx="10" cy="10" r="10" fill="url(#neonCyan)" filter="url(#glow)"/>
+      <text x="30" y="15" font-family="'JetBrains Mono', monospace" font-size="15" font-weight="700" fill="url(#neonCyan)">🫁 Pulmones</text>
+      <text x="30" y="35" font-family="'JetBrains Mono', monospace" font-size="11" fill="#888">MobileNetV2 + SVM</text>
+      <text x="30" y="50" font-family="'JetBrains Mono', monospace" font-size="11" fill="url(#neonGold)">97.68% acc</text>
+      <!-- Anillo rotativo -->
+      <circle cx="10" cy="10" r="14" fill="none" stroke="url(#neonCyan)" stroke-width="2" stroke-dasharray="20 10" class="rotate" opacity="0.6"/>
+    </g>
+
+    <g transform="translate(0, 90)" class="float" style="animation-delay: 1.5s;">
+      <circle cx="10" cy="10" r="10" fill="url(#neonMagenta)" filter="url(#glow)"/>
+      <text x="30" y="15" font-family="'JetBrains Mono', monospace" font-size="15" font-weight="700" fill="url(#neonMagenta)">🕵️ Detective</text>
+      <text x="30" y="35" font-family="'JetBrains Mono', monospace" font-size="11" fill="#888">React 19 + WebSocket</text>
+      <text x="30" y="50" font-family="'JetBrains Mono', monospace" font-size="11" fill="url(#neonGold)">UNESCO MIL 2026</text>
+      <circle cx="10" cy="10" r="14" fill="none" stroke="url(#neonMagenta)" stroke-width="2" stroke-dasharray="20 10" class="rotate" style="animation-direction: reverse;" opacity="0.6"/>
+    </g>
+
+    <g transform="translate(0, 180)" class="float" style="animation-delay: 2s;">
+      <circle cx="10" cy="10" r="10" fill="url(#neonGold)" filter="url(#glow)"/>
+      <text x="30" y="15" font-family="'JetBrains Mono', monospace" font-size="15" font-weight="700" fill="url(#neonGold)">🔗 Lexis</text>
+      <text x="30" y="35" font-family="'JetBrains Mono', monospace" font-size="11" fill="#888">RAG + LLMs Legal</text>
+      <text x="30" y="50" font-family="'JetBrains Mono', monospace" font-size="11" fill="#666">🚧 En desarrollo</text>
+    </g>
+  </g>
+
+  <!-- Footer: typing animation simulation -->
+  <g transform="translate(60, 340)">
+    <text x="0" y="0" font-family="'JetBrains Mono', monospace" font-size="13" fill="#666">$ kubectl get signals --all-namespaces</text>
+    <text x="0" y="22" font-family="'JetBrains Mono', monospace" font-size="12" fill="url(#neonCyan)" opacity="0.7">NAMESPACE     NAME                    STATUS    AGE</text>
+    <text x="0" y="40" font-family="'JetBrains Mono', monospace" font-size="12" fill="#aaa">cv            pulmones-metodologia    Active    27d</text>
+    <text x="0" y="56" font-family="'JetBrains Mono', monospace" font-size="12" fill="#aaa">nlp           detective-digital       Active    15d</text>
+    <text x="0" y="72" font-family="'JetBrains Mono', monospace" font-size="12" fill="#666">legal         lexis                   Pending   —</text>
+  </g>
+
+  <!-- Esquinas decorativas -->
+  <g stroke="url(#neonCyan)" stroke-width="2" fill="none" opacity="0.4">
+    <path d="M 20 20 h 40 M 20 20 v 40"/>
+    <path d="M 1180 20 h -40 M 1180 20 v 40"/>
+    <path d="M 20 380 h 40 M 20 380 v -40"/>
+    <path d="M 1180 380 h -40 M 1180 380 v -40"/>
+  </g>
+  <g stroke="url(#neonMagenta)" stroke-width="1.5" fill="none" opacity="0.3">
+    <path d="M 30 30 h 20 M 30 30 v 20"/>
+    <path d="M 1170 30 h -20 M 1170 30 v 20"/>
+    <path d="M 30 370 h 20 M 30 370 v -20"/>
+    <path d="M 1170 370 h -20 M 1170 370 v -20"/>
+  </g>
+</svg>

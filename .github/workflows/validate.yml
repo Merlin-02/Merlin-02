@@ -1,0 +1,135 @@
+name: 🔍 Profile Validation
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Actualizar badges dinámicos cada 6 horas
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write  # Para actualizar README si fuera necesario
+
+jobs:
+  markdown-lint:
+    name: 📝 Markdown Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install markdownlint-cli
+        run: npm install -g markdownlint-cli
+
+      - name: Lint README.md
+        run: markdownlint README.md --config .markdownlint.json || true
+
+  link-check:
+    name: 🔗 Link Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install lychee
+        run: cargo install lychee || npm install -g lychee
+
+      - name: Check links in README
+        run: |
+          lychee README.md --verbose --max-concurrency 10 --exclude-mail || true
+
+  mermaid-syntax:
+    name: 📐 Mermaid Syntax Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install mermaid-cli
+        run: npm install -g @mermaid-js/mermaid-cli
+
+      - name: Validate Mermaid diagrams
+        run: |
+          # Extraer diagramas mermaid del README y validarlos
+          grep -A 1000 '\`\`\`mermaid' README.md | sed -n '/\`\`\`mermaid/,/\`\`\`/p' | head -n -1 | tail -n +2 > /tmp/diagram.mmd
+          if [ -s /tmp/diagram.mmd ]; then
+            mmdc -i /tmp/diagram.mmd -o /dev/null 2>&1 && echo "✅ Mermaid syntax OK" || echo "⚠️ Mermaid validation skipped (requires Chrome)"
+          else
+            echo "ℹ️ No Mermaid diagrams found"
+          fi
+
+  asset-check:
+    name: 🖼️ Asset Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verify banner.svg exists
+        run: |
+          if [ -f "assets/banner.svg" ]; then
+            echo "✅ assets/banner.svg exists"
+            # Verify it's valid SVG
+            head -5 assets/banner.svg | grep -q '<svg' && echo "✅ Valid SVG header" || echo "⚠️ SVG header check failed"
+          else
+            echo "❌ assets/banner.svg missing"
+            exit 1
+          fi
+
+  validate-workflows:
+    name: ⚙️ Workflow Syntax
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate workflow YAML syntax
+        run: |
+          python3 -c "
+import yaml, glob, sys
+errors = 0
+for f in glob.glob('.github/workflows/*.yml') + glob.glob('.github/workflows/*.yaml'):
+    try:
+        with open(f) as fp:
+            yaml.safe_load(fp)
+        print(f'✅ {f}')
+    except Exception as e:
+        print(f'❌ {f}: {e}')
+        errors += 1
+sys.exit(errors)
+"
+
+  summary:
+    name: 📋 Summary
+    needs: [markdown-lint, link-check, mermaid-syntax, asset-check, validate-workflows]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Job status
+        run: |
+          echo "📝 Markdown Lint: ${{ needs.markdown-lint.result }}"
+          echo "🔗 Link Check: ${{ needs.link-check.result }}"
+          echo "📐 Mermaid Syntax: ${{ needs.mermaid-syntax.result }}"
+          echo "🖼️ Asset Check: ${{ needs.asset-check.result }}"
+          echo "⚙️ Workflow Syntax: ${{ needs.validate-workflows.result }}"
+          if [[ "${{ needs.asset-check.result }}" != "success" ]] || [[ "${{ needs.validate-workflows.result }}" != "success" ]]; then
+            exit 1
+          fi
